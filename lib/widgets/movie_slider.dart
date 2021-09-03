@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/models/models.dart';
 
 
 class MovieSlider extends StatelessWidget {
+
+  final List<Movie> movies;
+  final String? title;
+
+  const MovieSlider({
+    required this.movies, 
+    this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +21,11 @@ class MovieSlider extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //Bottom Section. Title
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Populares', style:TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ),
+          if(this.title != null)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(this.title!, style:TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
 
           SizedBox(height: 5),
 
@@ -25,8 +35,8 @@ class MovieSlider extends StatelessWidget {
               //ListBuilder defines its width according to the parent widget
               //If the parent it's flexible then an error ocurrs. Wrap parent with Expanded
               scrollDirection: Axis.horizontal,
-              itemCount: 20,
-              itemBuilder: ( _ , int index) => _MoviePoster()
+              itemCount: movies.length,
+              itemBuilder: ( _ , int index) => _MoviePoster(movies[index])
             ),
           )
         ],
@@ -37,6 +47,10 @@ class MovieSlider extends StatelessWidget {
 
 
 class _MoviePoster extends StatelessWidget {
+
+  final Movie movie;
+
+  const _MoviePoster(this.movie);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +70,7 @@ class _MoviePoster extends StatelessWidget {
                 height: 190,
                 fit: BoxFit.cover,
                 placeholder: AssetImage('assets/no-image.jpg'), 
-                image: NetworkImage('https://via.placeholder.com/300x400'),
+                image: NetworkImage(movie.fullPosterImg),
               ),
             ),
           ),
@@ -64,7 +78,7 @@ class _MoviePoster extends StatelessWidget {
           SizedBox(height: 5),
 
           Text(
-            'Kimetsu no Yaiba: Demon Slayer the Infinite train',
+            movie.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

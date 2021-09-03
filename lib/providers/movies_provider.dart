@@ -17,6 +17,7 @@ class MoviesProvider extends ChangeNotifier{
     print('MoviesProvider inicializado');
 
     this.getOnDisplayMovies();
+    this.getPopularMovies();
   }
 
   getOnDisplayMovies() async {
