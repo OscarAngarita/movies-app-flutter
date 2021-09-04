@@ -58,7 +58,9 @@ class MoviesProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<List<Cast>> getMovieCast(int movieId) async {
+  Future<List<Cast>> getMovieCast(int movieId) async { //Async converts into a Future every return that it's resolved
+
+    if(movieCast.containsKey(movieId)) return movieCast[movieId]!; //Check if the cast it's already into the local storage to avoid making another api request
 
     final jsonData = await this._getJsonData('3/movie/$movieId/credits');
     final creditsResponse = CreditsResponse.fromJson(jsonData);

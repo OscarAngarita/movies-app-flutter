@@ -18,7 +18,7 @@ class CastingCards extends StatelessWidget {
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
 
     return FutureBuilder(
-      future: moviesProvider.getMovieCast(movieId),
+      future: moviesProvider.getMovieCast(movieId), // getMovieCast first called in this instance
       builder: (_, AsyncSnapshot<List<Cast>> snapshot) {
 
         if(!snapshot.hasData){
@@ -36,9 +36,9 @@ class CastingCards extends StatelessWidget {
           width: double.infinity,
           height: 180,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: cast.length,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (_, int index) => _CastCard()
+            itemBuilder: (_, int index) => _CastCard(cast[index])
           ),
         );
       },
@@ -50,6 +50,10 @@ class CastingCards extends StatelessWidget {
 
 
 class _CastCard extends StatelessWidget {
+
+  final Cast actor;
+
+  const _CastCard(this.actor);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +68,7 @@ class _CastCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: FadeInImage(
               placeholder: AssetImage('assets/no-image.jpg'), 
-              image: NetworkImage('https://via.placeholder.com/150x300'),
+              image: NetworkImage(actor.fullProfilePath),
               height: 140,
               width: 100,
               fit: BoxFit.cover,
@@ -74,7 +78,7 @@ class _CastCard extends StatelessWidget {
           SizedBox(height: 5),
 
           Text(
-            'actor.name name name name name name ',
+            actor.name,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
             textAlign: TextAlign.center,
