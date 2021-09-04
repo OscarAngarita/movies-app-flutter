@@ -12,6 +12,8 @@ class MoviesProvider extends ChangeNotifier{
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
 
+  Map<int, List<Cast>> movieCast = {};
+
   int _popularPage = 0;
 
 
@@ -54,6 +56,16 @@ class MoviesProvider extends ChangeNotifier{
     //Using spread operator to separate each movie from the list. Also it is adding the new movies to the already known popular movies.
     
     notifyListeners();
+  }
+
+  Future<List<Cast>> getMovieCast(int movieId) async {
+
+    final jsonData = await this._getJsonData('3/movie/$movieId/credits');
+    final creditsResponse = CreditsResponse.fromJson(jsonData);
+
+    movieCast[movieId] = creditsResponse.cast;
+
+    return creditsResponse.cast;
   }
 
 }
