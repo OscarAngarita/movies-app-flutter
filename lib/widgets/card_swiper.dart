@@ -7,9 +7,8 @@ class CardSwiper extends StatelessWidget {
   final List<Movie> movies;
 
   const CardSwiper({
-    Key? key, 
     required this.movies
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

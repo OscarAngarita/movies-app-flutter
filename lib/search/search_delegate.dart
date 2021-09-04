@@ -35,7 +35,7 @@ class MovieSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text('buildResults');
+    return getMoviesResult(context);
   }
 
   Widget _emptyContainer(){
@@ -47,22 +47,27 @@ class MovieSearchDelegate extends SearchDelegate {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
+  Widget buildSuggestions(BuildContext context) { //Called at every input on the search bar
    
     if(query.isEmpty) {
       return _emptyContainer();
     }
 
+    return getMoviesResult(context);
+  }
+
+  StreamBuilder<List<Movie>> getMoviesResult(BuildContext context) {
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
-
-    return FutureBuilder(
-      future: moviesProvider.searchMovies(query),
+    moviesProvider.getSuggestionsByQuery(query); //Called at every input on the search bar
+    
+    return StreamBuilder(
+      stream: moviesProvider.suggestionStream,
       builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
-
+    
         if(!snapshot.hasData) return _emptyContainer();
-
+    
         final movies = snapshot.data!;
-
+    
         return ListView.builder(
           itemCount: movies.length,
           itemBuilder: (_, int index) => _MovieItem(movies[index])
@@ -72,6 +77,9 @@ class MovieSearchDelegate extends SearchDelegate {
   }
 
 }
+
+
+
 
 
 class _MovieItem extends StatelessWidget {
